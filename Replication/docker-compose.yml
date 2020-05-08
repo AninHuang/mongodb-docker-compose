@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  mongo1:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: mongo1
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet rs0"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+      - ./scripts/init-rs.js:/scripts/init-rs.js
+      - ./scripts/init-usr.js:/scripts/init-usr.js
+    ports:
+      - "27017:27017"
+  mongo2:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: mongo2
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet rs0"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27018:27017"
+  mongo3:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: mongo3
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet rs0"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27019:27017"

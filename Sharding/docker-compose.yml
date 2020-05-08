@@ -1,0 +1,171 @@
+version: '3.7'
+
+services:
+
+  ## Config Servers
+  config01:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: config01
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --configsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet configserver"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+      - ./scripts/init-configserver.js:/scripts/init-configserver.js
+    ports:
+      - "27031:27019"
+  config02:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: config02
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --configsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet configserver"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27032:27019"
+  config03:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: config03
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --configsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet configserver"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27033:27019"
+
+  ## Shards
+  shard01a:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard01a
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard01"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+      - ./scripts/init-shard01.js:/scripts/init-shard01.js
+    ports:
+      - "27021:27018"
+  shard01b:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard01b
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard01"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27022:27018"
+  shard01c:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard01c
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard01"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27023:27018"
+  shard02a:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard02a
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard02"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+      - ./scripts/init-shard02.js:/scripts/init-shard02.js
+    ports:
+      - "27024:27018"
+  shard02b:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard02b
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard02"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27025:27018"
+  shard02c:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard02c
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard02"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27026:27018"
+  shard03a:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard03a
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard03"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+      - ./scripts/init-shard03.js:/scripts/init-shard03.js
+    ports:
+      - "27027:27018"
+  shard03b:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard03b
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard03"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27028:27018"
+  shard03c:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: shard03c
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongod --auth --shardsvr --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --replSet shard03"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+    ports:
+      - "27029:27018"
+
+  ## Router
+  router01:
+    image: nomomax/mongo-enterprise:4.2
+    container_name: router01
+    command: bash -c "
+      cp /scripts/mongo-keyfile /scripts/keyfile &&
+      chmod 400 /scripts/keyfile &&
+      mongos --bind_ip 0.0.0.0 --keyFile /scripts/keyfile --configdb configserver/config01:27019,config02:27019,config03:27019"
+    volumes:
+      - ./scripts/mongo-keyfile:/scripts/mongo-keyfile
+      - ./scripts/init-router.js:/scripts/init-router.js
+      - ./scripts/init-usr.js:/scripts/init-usr.js
+    ports:
+      - "27017:27017"
+    depends_on:
+      - config01
+      - config02
+      - config03
+      - shard01a
+      - shard01b
+      - shard01c
+      - shard02a
+      - shard02b
+      - shard02c
+      - shard03a
+      - shard03b
+      - shard03c
